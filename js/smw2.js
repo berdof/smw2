@@ -14,7 +14,7 @@
 (function() {
   var __slice = [].slice;
 
-  (function($smw2Jq, window) {
+  (function($smw2Jq, window1, window) {
     var Smw2;
 
     return Smw2 = (function() {
@@ -59,13 +59,22 @@
       }
 
       Smw2.prototype.eventHandlers = {
-        foo: function(e) {}
+        redirectClick: function(e) {
+          var href, self;
+
+          self = e.data.plugin;
+          href = $smw2Jq(this).data('smw2Redirect');
+          window.open(href);
+        }
       };
 
       Smw2.prototype.attachEvents = function() {
-        this.$el.find('.yaw__feedback__sort a').on('click', {
-          plugin: this
-        }, this.eventHandlers.foo);
+        var self;
+
+        self = this;
+        $smw2Jq('#smw2').on('click', '.smw2__body tr', {
+          plugin: self
+        }, self.eventHandlers.redirectClick);
       };
 
       Smw2.prototype.fetchId = function() {
@@ -102,32 +111,14 @@
         });
       };
 
-      Smw2.prototype.buildOfferFrag = function(data) {
-        var $frag;
+      Smw2.prototype.fillWidget = function() {
+        var html, source, template;
 
-        $frag = $smw2Jq('<tr></tr>', {
-          "data-smw2-href": data.clickUrl,
-          html: [
-            $smw2Jq('<td></td>', {
-              "data-smw2": 'offerName'
-            })
-          ]
-        });
-        console.log($frag);
-      };
-
-      Smw2.prototype.fillOffers = function(name) {
-        var $offer, self;
-
-        self = this;
-        $offer = $smw2Jq(self.offerElem);
-        self.dataCache.offers.forEach(function(dOffers, i) {
-          self.buildOfferFrag(dOffers);
-          $offer.find('[data-smw2=offerName]').html(dOffers.name);
-          $offer.find('[data-smw2=offerPrice]').html("" + dOffers.price + " р.");
-          $offer.find('[data-smw2=offerRate]').css('width', "" + (dOffers.shopRating * 20) + "%");
-          $smw2Jq('[data-smw2=repeater]').append($offer);
-        });
+        console.log(this.dataCache);
+        source = $smw2Jq("#smw2-template").html();
+        template = Handlebars.compile(source);
+        html = template(this.dataCache);
+        $smw2Jq('#smw2').html(html);
       };
 
       Smw2.prototype.init = function() {
@@ -144,13 +135,13 @@
                 if (index < self.options.limit) {
                   self.dataCache.offers.push({
                     name: data.name,
-                    shopRating: data.shopRating,
+                    shopRating: data.shopRating * 20,
                     price: data.price,
                     clickUrl: data.clickUrl
                   });
                 }
               });
-              self.fillOffers();
+              self.fillWidget();
             });
           });
         });

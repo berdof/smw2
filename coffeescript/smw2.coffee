@@ -9,7 +9,7 @@
  **
 ###
 
-(($smw2Jq, window) ->
+(($smw2Jq, window1,window) ->
   class Smw2
     $el: null
     defaults:
@@ -21,6 +21,7 @@
       widgetSelectorId: 'smw2'
       modelId : 0
       limit:5
+
     dataCache:
       name:""
       offers: []
@@ -28,6 +29,7 @@
     log: (str)->
       console.log str
       return
+
     appendLibraries:()->
       self = @
       $smw2Jq('head').prepend($smw2Jq('<link/>', {
@@ -35,19 +37,26 @@
         'rel': 'stylesheet'
       }));
       return
+
     constructor: (el, options) ->
       @options = $smw2Jq.extend({}, @defaults, options)
       @$el = $smw2Jq(el)
       @init()
       @appendLibraries();
       return
-    #981 658
+
     eventHandlers:
-      foo: (e)->
+      redirectClick: (e)->
+        self =  e.data.plugin
+        href =  $smw2Jq(@).data('smw2Redirect')
+        #window.location.href = href
+        window.open(href)
+
         return
 
     attachEvents: ()->
-      @$el.find('.yaw__feedback__sort a').on('click', {plugin: @}, @eventHandlers.foo)
+      self = @
+      $smw2Jq('#smw2').on('click','.smw2__body tr', {plugin: self},self.eventHandlers.redirectClick)
       return
 
     fetchId: ()->
@@ -74,50 +83,13 @@
         'url': url
         'dataType': 'jsonp'
       )
-    buildOfferFrag:(data)->
-      $frag = $smw2Jq(
-        '<tr></tr>'
-          "data-smw2-href":data.clickUrl
-          html:
-            [
-              $smw2Jq(
-                '<td></td>'
-                  "data-smw2":'offerName'
-              )
-            ]
-      )
-      #$smw2Jq('body').html($frag)
-      console.log $frag
-#
-#    offerElem:
-#    """
-#    <td data-smw2='offerName'></td>
-#    <td>
-#    <div class="smw2__rate">
-#    <span data-smw2='offerRate' style="width: 0%;"></span>
-#    </div>
-#    </td>
-#    <td data-smw2='offerPrice'></td>
-#    """
-      return
-
-    fillOffers:(name)->
-      self = @
-      $offer =  $smw2Jq(self.offerElem)
-
-      #$offer =  $smw2Jq('[data-smw2=repeater]')
-      self.dataCache.offers.forEach(
-        (dOffers,i)->
-          self.buildOfferFrag(dOffers)
-          $offer.find('[data-smw2=offerName]').html(dOffers.name)
-          $offer.find('[data-smw2=offerPrice]').html("#{dOffers.price} р.")
-          $offer.find('[data-smw2=offerRate]').css('width',"#{dOffers.shopRating*20}%")
-
-          $smw2Jq('[data-smw2=repeater]').append($offer)
-          return
-      )
-
-
+    fillWidget:()->
+      console.log @dataCache
+      #
+      source   = $smw2Jq("#smw2-template").html()
+      template = Handlebars.compile(source)
+      html = template(@dataCache)
+      $smw2Jq('#smw2').html(html)
       return
 
     init: () ->
@@ -138,12 +110,12 @@
 
                         self.dataCache.offers.push
                           name : data.name
-                          shopRating : data.shopRating
+                          shopRating : data.shopRating*20
                           price : data.price
                           clickUrl: data.clickUrl
                       return
                   )
-                  self.fillOffers()
+                  self.fillWidget()
                   return
               )
               return

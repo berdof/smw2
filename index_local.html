@@ -19,68 +19,39 @@
 <br>
 
 <div id="smw2" class="">
+</div>
+<script id="smw2-template" type="text/x-handlebars-template">
+
     <div data-smw2="name" class="smw2__header">
-        Apple Iphone 5
+        {{name}}
     </div>
     <div class="smw2__body">
         <table>
-            <tr data-smw2-='redirect' data-smw2="repeater">
-                <td data-smw2='offerName'>Some shop </td>
+            {{#each offers}}
+            <tr data-smw2-redirect={{clickUrl}}>
+                <td>{{name}}</td>
                 <td>
                     <div class="smw2__rate">
-                        <span data-smw2='offerRate' style="width: 60%;"></span>
+                        <span style=width:{{shopRating}}%></span>
                     </div>
                 </td>
-                <td data-smw2='offerPrice'>12543 р.</td>
+                <td>{{price}}</td>
             </tr>
-            <tr data-smw2-='redirect' data-smw2="repeater">
-                <td data-smw2='offerName'>Some shop </td>
-                <td>
-                    <div class="smw2__rate">
-                        <span data-smw2='offerRate' style="width: 60%;"></span>
-                    </div>
-                </td>
-                <td data-smw2='offerPrice'>12543 р.</td>
-            </tr>
-            <tr data-smw2-='redirect' data-smw2="repeater">
-                <td data-smw2='offerName'>Some shop bla-bla-bla-ld </td>
-                <td>
-                    <div class="smw2__rate">
-                        <span data-smw2='offerRate' style="width: 60%;"></span>
-                    </div>
-                </td>
-                <td data-smw2='offerPrice'>12543 р.</td>
-            </tr>
-            <tr data-smw2-='redirect' data-smw2="repeater">
-                <td data-smw2='offerName'>Some shop bla-bla-bla-ld </td>
-                <td>
-                    <div class="smw2__rate">
-                        <span data-smw2='offerRate' style="width: 60%;"></span>
-                    </div>
-                </td>
-                <td data-smw2='offerPrice'>12543 р.</td>
-            </tr>
-            <tr data-smw2-='redirect' data-smw2="repeater">
-                <td data-smw2='offerName'>Some shop bla-bla-bla-ld </td>
-                <td>
-                    <div class="smw2__rate">
-                        <span data-smw2='offerRate' style="width: 60%;"></span>
-                    </div>
-                </td>
-                <td data-smw2='offerPrice'>12543 р.</td>
-            </tr>
+            {{/each}}
         </table>
     </div>
     <div class="smw2__footer">
         powered by Socialmart, Яндекс.Маркет
     </div>
-</div>
 
+
+</script>
 <script type="text/javascript" charset="UTF-8" src="http://socialmart.ru/widget/1/js/libs/jquery-1.7.1.min.js"></script>
 
 <script type="text/javascript" charset="UTF-8">
     $smw2Jq = jQuery.noConflict();
 </script>
+<script type="text/javascript" src="js/handlebars.js"></script>
 <script type="text/javascript" src="js/smw2.js"></script>
 <script type="text/javascript">
     $smw2Jq(function () {
