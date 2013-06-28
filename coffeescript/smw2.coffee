@@ -9,8 +9,37 @@
  **
 ###
 
-(($smw2Jq, window1,window) ->
+(($smw2Jq, window) ->
   class Smw2
+    hello:()->
+      i = 0
+      b = i+1
+      console.log b
+      return
+    viewTemplate: """
+                  <div data-smw2="name" class="smw2__header">
+                  {{name}}
+                  </div>
+                  <div class="smw2__body">
+                  <table>
+                  {{#each offers}}
+                  <tr data-smw2-redirect={{clickUrl}}>
+                  <td>{{name}}</td>
+                  <td>
+                  <div class="smw2__rate">
+                  <span style=width:{{shopRating}}%></span>
+                  </div>
+                  </td>
+                  <td>{{price}}</td>
+                  </tr>
+                  {{/each}}
+                  </table>
+                  </div>
+                  <div class="smw2__footer">
+                  powered by Socialmart, Яндекс.Маркет
+                  </div>
+                  """
+
     $el: null
     defaults:
       title: ''
@@ -84,13 +113,12 @@
         'dataType': 'jsonp'
       )
     fillWidget:()->
-      console.log @dataCache
-      #
-      source   = $smw2Jq("#smw2-template").html()
+      source   = @viewTemplate
       template = Handlebars.compile(source)
       html = template(@dataCache)
       $smw2Jq('#smw2').html(html)
       return
+
 
     init: () ->
       self = this
@@ -133,4 +161,4 @@
           $this.data 'smw2', (data = new Smw2(this, option))
         if typeof option == 'string'
           data[option].apply(data, args)
-) $smw2Jq, window.jQuery, window
+) $smw2Jq, window.jQuery

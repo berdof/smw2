@@ -2,6 +2,25 @@
 
 #smw2 {
   margin: 0 auto;
+  background: #fff;
+  position: absolute;
+  z-index: 1000;
+
+  &:before {
+    content: '';
+    display: block;
+    position: absolute;
+    background: #fff;
+    width: 10px;
+    height: 10px;
+    top: -6px;
+    margin: 0 0 0 -5px;
+    left: 50%;
+    border: 1px solid #CFCFCF;
+    z-index: 999;
+    @include transform(rotate(-45deg));
+
+  }
   strong {
     font-weight: 700;
   }
@@ -30,6 +49,10 @@ $images-spacing: 12px;
     font-size: 16px;
     padding: 10px 14px;
     border-bottom: 1px solid #d7d7d7;
+    @include border-radius(11px 11px 0 0);
+    background: #fff;
+    position: relative;
+    z-index: 1000;
   }
 
   .smw2__body{

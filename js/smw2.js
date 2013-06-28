@@ -14,10 +14,20 @@
 (function() {
   var __slice = [].slice;
 
-  (function($smw2Jq, window1, window) {
+  (function($smw2Jq, window) {
     var Smw2;
 
     return Smw2 = (function() {
+      Smw2.prototype.hello = function() {
+        var b, i;
+
+        i = 0;
+        b = i + 1;
+        console.log(b);
+      };
+
+      Smw2.prototype.viewTemplate = "<div data-smw2=\"name\" class=\"smw2__header\">\n{{name}}\n</div>\n<div class=\"smw2__body\">\n<table>\n{{#each offers}}\n<tr data-smw2-redirect={{clickUrl}}>\n<td>{{name}}</td>\n<td>\n<div class=\"smw2__rate\">\n<span style=width:{{shopRating}}%></span>\n</div>\n</td>\n<td>{{price}}</td>\n</tr>\n{{/each}}\n</table>\n</div>\n<div class=\"smw2__footer\">\npowered by Socialmart, Яндекс.Маркет\n</div>";
+
       Smw2.prototype.$el = null;
 
       Smw2.prototype.defaults = {
@@ -114,8 +124,7 @@
       Smw2.prototype.fillWidget = function() {
         var html, source, template;
 
-        console.log(this.dataCache);
-        source = $smw2Jq("#smw2-template").html();
+        source = this.viewTemplate;
         template = Handlebars.compile(source);
         html = template(this.dataCache);
         $smw2Jq('#smw2').html(html);
@@ -170,6 +179,6 @@
       return Smw2;
 
     })();
-  })($smw2Jq, window.jQuery, window);
+  })($smw2Jq, window.jQuery);
 
 }).call(this);
